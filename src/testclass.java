@@ -1,3 +1,5 @@
+import org.omg.CORBA.MARSHAL;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.lang.*;
@@ -42,11 +44,13 @@ public class testclass {
     }
     public static void main(String args[]){
         int count=10;
+        int nan =(int)Double.NEGATIVE_INFINITY;
         ArrayList arr = new ArrayList();
         arr.add(n1);arr.add(n2);
         System.out.println(n1 + " " + n2);//printing 0 and 1
-        printFibonacci(arr, count - 2);//n-2 because 2 numbers are already printed
-        System.out.println(arr);
+//        printFibonacci(arr, count - 2);//n-2 because 2 numbers are already printed
+        double x=2+2+3;
+        System.out.println((int)Math.floor(3/2));
     }
 }
 

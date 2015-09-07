@@ -1,4 +1,6 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class kWayMergeSort {
@@ -6,38 +8,43 @@ public class kWayMergeSort {
 //    int[] C = new int[1000];
 //    int[][] B;
     public static ArrayList<Integer> A = new ArrayList<Integer>();
-    public static ArrayList<Integer> C = new ArrayList<Integer>();
-    public static ArrayList<ArrayList<Integer>> B = new ArrayList<ArrayList<Integer>>();
-    public static ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer>>();
+//    public static ArrayList<Integer> C = new ArrayList<Integer>();
+    public static int[] C;
+
     public  static void main(String[] args){
         Scanner in = new Scanner(System.in);
         System.out.println("Input n: ");
         int n = in.nextInt();
+        C =new int[n];
         System.out.println("Input k: ");
         int k = in.nextInt();
 //        B= new ArrayList<ArrayList<Integer>>();
-        for (int i=0; i<2; ++i)
-            B.add(new ArrayList<Integer>());
+
         for (int i=0;i<n;i++) {
             System.out.println("Input element: " + i);
             A.add(in.nextInt());
         }
         System.out.println("Initial array: \n"+A);
         KWMS(A, 0, n - 1, k);
-        System.out.println("Sorted array: \n" + A);
+        System.out.println("Sorted array: \n" + Arrays.toString(C));
 
     }
     public static void KWMS(ArrayList<Integer> A,int i, int j, int k){
         int x = j-i+1;
         int a = (int)Math.ceil(x / k);
-        int b = (int)Math.floor(x/k);
+        int b = (int)Math.floor(x / k);
         int r = x%k;
-
-        for (int d=0; d<2; ++d)
-            temp.add(new ArrayList<Integer>());
-        int count =0;
-        if(x==1)
+        if(x<=1)
             return;
+
+        ArrayList<ArrayList<Integer>> B = new ArrayList<ArrayList<Integer>>();
+        ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer>>();
+        for (int d=0; d<2; ++d) {
+            B.add(new ArrayList<Integer>());
+            temp.add(new ArrayList<Integer>());
+        }
+        int count =0;
+
         if (r!=0){
             for(int p=0;p<=r-1;p++){
                 if (i+(p+1)*a-1<=j) {
@@ -68,15 +75,17 @@ public class kWayMergeSort {
         int lowerIndex;
         for (int p=0;p<size;p++){
             lowerIndex=temp.get(0).get(p) ;
-            B.get(0).add(p,A.get(lowerIndex));
-            B.get(1).add(p,p);
+            B.get(0).add(A.get(lowerIndex));
+            B.get(1).add(p);
         }
         try {
             buildHeap(B, size);
-            while (!B.isEmpty()) {
+            while (!B.isEmpty() && i<=j) {
+                System.out.println("B: "+B);
                 int arraySecton = B.get(1).get(0);
-                C.add(i, deleteMax(B, B.get(0).size()));
-                System.out.println("array section "+arraySecton);
+//                C.add(i, deleteMax(B, B.get(0).size()));
+                C[i]=deleteMax(B, B.get(0).size());
+                System.out.println("array section " + arraySecton);
                 temp.get(0).set(arraySecton, temp.get(0).get(arraySecton) + 1);
                 if (temp.get(0).get(arraySecton) <= temp.get(1).get(arraySecton)) {
                     lowerIndex = temp.get(0).get(arraySecton);
@@ -88,8 +97,12 @@ public class kWayMergeSort {
                 }
 //                A.set(temp.get(0).get(arraySecton),(int)Double.NEGATIVE_INFINITY);
             buildHeap(B,B.get(0).size());
-                System.out.println("2-temp "+temp);
+                System.out.println("2-temp " + temp);
+                System.out.println("C: " + Arrays.toString(C));
+                System.out.println();
                 i++;
+                temp.trimToSize();
+                B.trimToSize();
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -133,12 +146,13 @@ public class kWayMergeSort {
         for(int j=parent(n-1);j>=0;j--)
             fixHeap(B,j,n);
     }
-    public static int deleteMax ( ArrayList<ArrayList<Integer>> A,int n){
+    public static int deleteMax ( ArrayList<ArrayList<Integer>> B,int n){
         int max = B.get(0).get(0);
         B.get(0).set(0,B.get(0).get(n-1));  B.get(0).remove(n - 1);
-        B.get(1).set(0,B.get(1).get(n-1));  B.get(1).remove(n-1);
+        B.get(1).set(0, B.get(1).get(n - 1));  B.get(1).remove(n - 1);
         n--;
-        fixHeap(B,0,n);
+        B.trimToSize();
+        fixHeap(B, 0, n);
         return max;
     }
     public static void insertHeap (ArrayList<ArrayList<Integer>> B,int x,int section,int n){
