@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class kWayMerge2 {
     public static int[] A ={14,78,25,17,19,21,30,90,23,22,33,44,55,66,77,88};
-//    public static int[] A ={22,12,14,15,78,16};
+//    public static int[] A ={22,12,14,15,16,17,25,11};
 
     public static  int[] C ;
 //    public static  int[][] B;
@@ -99,23 +99,29 @@ public class kWayMerge2 {
                 B[0][p] = A[temp[0][p]];
                 B[1][p] = p;
             }
-        }
+        }System.out.println("B: "+Arrays.toString(B[0])+" before buildHeap");
         try {
             buildHeap(B, k);
+            System.out.println("B: " + Arrays.toString(B[0])+" after buildHeap");
             int p=i;
-            for (int d=0; d<x ;d++,p++){
+            for (int d=0; d<x ;d++){
                 int arraySecton = B[1][0];
+                System.out.println("B: " + Arrays.toString(B[1])+" arraySection row");
                 if(arraySecton!=Nan) {
-                    System.out.println("B: "+Arrays.toString(B[0]));
+                    System.out.println("B: "+Arrays.toString(B[0])+" before deletion");
                     C[p] = deleteMax(B, k);
+                    System.out.println("B: "+Arrays.toString(B[0])+" after deletion");
+                    System.out.println("C: "+ Arrays.toString(C));
                     temp[0][arraySecton] += 1;
-
+//                    buildHeap(B,k);
                     if (temp[0][arraySecton] <= temp[1][arraySecton]) {
                         lowerIndex = temp[0][arraySecton];
                         insertHeap(B, A[lowerIndex], arraySecton, k);
                     }
-                    System.out.println("C: "+ Arrays.toString(C));
+                    System.out.println("B: "+Arrays.toString(B[0])+" after insertion");
+
                     System.out.println();
+                    p++;
                 }
             }
         }catch (Exception e){
@@ -172,18 +178,27 @@ public class kWayMerge2 {
     }
 
     public static void insertHeap (int[][] B,int x,int section,int n){
-        B[0][n-1]=x;
-        B[1][n-1]=section;
-        int i = n-1,p;
-        while (i>0){
-            if(B[0][i]>=B[0][parent(i)]){    //swap
-                p=parent(i);
-                int[] temp = {B[0][i],B[1][i]};
-                B[0][i]=B[0][p] ;   B[1][i]=B[1][p] ;
-                B[0][p]=temp[0];   B[1][p]=temp[1];
+        int pos=n-1;
+        for (int j=n-1;j>=0;j--){
+            if (B[0][j]==Nan){
+                pos=j;
+                break;
             }
-            i=parent(i);
+
         }
+
+        B[0][pos]=x;
+        B[1][pos]=section;
+//        int i = n-1,p;
+//        while (i>0){
+//            if(B[0][i]>=B[0][parent(i)]){    //swap
+//                p=parent(i);
+//                int[] temp = {B[0][i],B[1][i]};
+//                B[0][i]=B[0][p] ;   B[1][i]=B[1][p] ;
+//                B[0][p]=temp[0];   B[1][p]=temp[1];
+//            }
+//            i=parent(i);
+//        }
         fixHeap(B,0,n);
     }
 }
