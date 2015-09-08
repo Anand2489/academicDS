@@ -2,8 +2,8 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class kWayMerge {
-    public static int[] A ={22,12,14,15,78,16,25,11,15,17,19,21,30,15,16,90};
+public class kWayMerge2 {
+    public static int[] A ={14,78,25,17,19,21,30,90,23,22,33,44,55,66,77,88};
 //    public static int[] A ={22,12,14,15,78,16};
 
     public static  int[] C ;
@@ -13,8 +13,9 @@ public class kWayMerge {
 
     public  static void main(String[] args){
         Scanner in = new Scanner(System.in);
-        System.out.println("Input n: ");
-        int n = 16;//in.nextInt();
+//        System.out.println("Input n: ");
+        int n = A.length;//in.nextInt();
+        System.out.println("A length: "+n);
 //        A =new int[n];
         C =new int[n];
         int[] D = new int[n];
@@ -36,79 +37,42 @@ public class kWayMerge {
         KWMS(A, 0, n - 1, k);
         System.out.println("Sorted array: \n" + Arrays.toString(A));
         System.out.println("Correct Sorted array: \n" + Arrays.toString(D));
-
+        boolean flag=true;
+        for (int i=0,j=n-1;flag==true && i<n && j>=0;i++,j--){
+            if (A[i]!=D[j])
+                flag=false;
+        }
+        System.out.println("Result: "+flag);
     }
+
     public static void KWMS(int[] A,int i, int j, int k){
         double x = j-i+1;
-        int a = (int)Math.ceil(x / k);
-        int b = (int)Math.floor(x / k);
-        int r = (int)x%k; int p1,p2,count=1;
         if(x<=1)
             return;
-        if (r!=0){
-            for(int p=0;p<=r-1 && (i + (p) * a)<=j && (i + (p + 1) * a - 1)<=j;p++){
-//                if (i+(p+1)*a-1<=j) {
-                    p1=i + (p) * a;
-                    p2=i + (p + 1) * a - 1;
-                    count++;
-                    KWMS(A, p1,p2, k);
-
-//                }else break;
-            }
-            for(int p=0;i+r*a+(p+1)*b-1<=j && (i + r * a + p * b)<=j;p++){
-//                if (i+r*a+(p+1)*b-1<=j) {
-                    p1=i + r * a + p * b;
-                    p2=i + r * a + (p + 1) * b - 1;
-                    KWMS(A, p1,p2, k);
-                    count++;
-//                }else break;
-
-            }count--;
-        }else{
-            for(int p=0;i+(p+1)*a-1<=j && (i + (p) * a)<=j && (i + (p + 1) * a - 1)<=j;p++){
-                p1=i + (p) * a;
-                p2=i + (p + 1) * a - 1;
-                count++;
-                KWMS(A,p1,p2,k);
-
-            }count--;
-        }
-//        k=count;
-       Merge(A,i,j,k);
-    }
-    public static void Merge(int[] A,int i, int j,int k){
-        double x = j-i+1;
         int a = (int)Math.ceil(x / k);
         int b = (int)Math.floor(x / k);
-        int r = (int)x%k;
+        int r = (int)x%k; int p1,p2,count=0;
         System.out.println("r value: "+r);
-
-//        int[][] B = new int[2][k];
         int[][] temp = new int[2][k];
         for (int d=0;d<k;d++){
             temp[0][d]=Nan; temp[1][d]=Nan;
-//            B[0][d]=Nan; B[1][d]=Nan;
         }
-        int count =0,countS=0;int p1,p2;
         if (r!=0){
             for(int p=0;p<=r-1 && (i + (p) * a)<=j && (i + (p + 1) * a - 1)<=j;p++){
-//                if (i+(p+1)*a-1<=j) {
-                    p1=i + (p) * a;
-                    p2=i + (p + 1) * a - 1;
-                    temp[0][count]=p1;
-                    temp[1][count]=p2;
-                    count++;countS++;
-//                }else break;
+                p1=i + (p) * a;
+                p2=i + (p + 1) * a - 1;
+                temp[0][count]=p1;
+                temp[1][count]=p2;
+                KWMS(A, p1,p2, k);
+                count++;
             }
-//            --count;
             for(int p=0;i+r*a+(p+1)*b-1<=j && (i + r * a + p * b)<=j;p++){
-//                if (i+r*a+(p+1)*b-1<=j) {
-                    p1=i + r * a + p * b;
-                    p2=i + r * a + (p + 1) * b - 1;
-                    temp[0][count]=p1;
-                    temp[1][count]=p2;
-                    count++;countS++;
-//                }else break;
+                p1=i + r * a + p * b;
+                p2=i + r * a + (p + 1) * b - 1;
+                temp[0][count]=p1;
+                temp[1][count]=p2;
+                KWMS(A, p1,p2, k);
+                count++;
             }
         }else{
             for(int p=0;i+(p+1)*a-1<=j && (i + (p) * a)<=j && (i + (p + 1) * a - 1)<=j;p++){
@@ -116,10 +80,15 @@ public class kWayMerge {
                 p2=i + (p + 1) * a - 1;
                 temp[0][count]=p1;
                 temp[1][count]=p2;
-                count++;countS++;
+                KWMS(A,p1,p2,k);
+                count++;
             }
         }
         k=count;
+        Merge(A,temp,i,j,k);
+    }
+    public static void Merge(int[] A,int[][] temp,int i, int j,int k){
+        int x=j-i+1;
         int[][] B = new int[2][k];
         for (int d=0;d<k;d++){
             B[0][d]=Nan; B[1][d]=Nan;
@@ -129,11 +98,10 @@ public class kWayMerge {
             if (temp[0][p]!=Nan) {
                 B[0][p] = A[temp[0][p]];
                 B[1][p] = p;
-            }else break;
+            }
         }
         try {
             buildHeap(B, k);
-//            System.out.println("B: "+Arrays.toString(B[0]));
             int p=i;
             for (int d=0; d<x ;d++,p++){
                 int arraySecton = B[1][0];
@@ -145,7 +113,6 @@ public class kWayMerge {
                     if (temp[0][arraySecton] <= temp[1][arraySecton]) {
                         lowerIndex = temp[0][arraySecton];
                         insertHeap(B, A[lowerIndex], arraySecton, k);
-//                        buildHeap(B, k);
                     }
                     System.out.println("C: "+ Arrays.toString(C));
                     System.out.println();
