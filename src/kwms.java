@@ -1,26 +1,24 @@
 
-
+import java.util.*;
+import java.lang.*;
+import java.io.*;
 import java.util.Scanner;
 
-public class kWayMerge2 {
+    class KWMS {
     public static int Nan = (int)Double.NEGATIVE_INFINITY;
     public static int[] A ;
-//    public static int[] A ={22,12,14,15,78,16,25,11,15,17,19,21,30,15,16,90};
+//        public static int[] A ={22,12,14,15,78,16,25,11,15,17,19,21,30,15,16,90};
     public static  int[] C ;
 
     public  static void main(String[] args){
         Scanner in = new Scanner(System.in);
-//        System.out.println("Input n: ");
         int n = in.nextInt();
         A =new int[n];
-        C =new int[n];
-//        System.out.println("Input k: ");
-        int k = in.nextInt();
-
-        for (int i=0;i<n;i++) {
-//            System.out.println("Input element: " + i);
-            A[i]=in.nextInt();
+		for (int i=0;i<n;i++) {
+           A[i]=in.nextInt();
         }
+        C =new int[n];
+        int k =in.nextInt();
         KWMS(A, 0, n - 1, k);
     }
 
@@ -96,10 +94,10 @@ public class kWayMerge2 {
                         insertHeap(B, A[lowerIndex], arraySecton, k);
                     }
                     System.out.println("Content of the heap is ");
-                for (int t=0;t<k;t++){
-                    if (B[0][t]!=Nan)
-                        System.out.print(B[0][t]+" ");
-                }
+                    for (int t=0;t<k;t++){
+                        if (B[0][t]!=Nan)
+                            System.out.print(B[0][t]+" ");
+                    }
                     System.out.println();
                     p++;
                 }
