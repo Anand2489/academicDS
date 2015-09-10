@@ -13,19 +13,26 @@ import java.util.Scanner;
     public  static void main(String[] args){
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
-        A =new int[n];
-		for (int i=0;i<n;i++) {
-           A[i]=in.nextInt();
-        }
-        C =new int[n];
-        int k =in.nextInt();
-        KWMS(A, 0, n - 1, k);
+		if (n>0){
+			A =new int[n];
+			for (int i=0;i<n;i++) {
+				A[i]=in.nextInt();
+			}
+			C =new int[n];
+			int k =in.nextInt();
+			if (k>1){
+				KWMS(A, 0, n - 1, k);
+			}
+		}
     }
 
     public static void KWMS(int[] A,int i, int j, int k){
         double x = j-i+1;
-        if(x<=1)
-            return;
+        if(x ==1){
+			System.out.println("The sorted list in the range "+i+" : "+j+" is "+A[i]);
+			 return;
+		}
+           
         int a = (int)Math.ceil(x / k);
         int b = (int)Math.floor(x / k);
         int r = (int)x%k; int p1,p2,count=0;
@@ -62,7 +69,7 @@ import java.util.Scanner;
         }
         k=count;
         Merge(A, temp, i, j, k);
-        System.out.println("The sorted list in the range "+i+":"+j);
+        System.out.print("The sorted list in the range "+i+" : "+j+" is ");
         for (int t=i;t<=j;t++)
             System.out.print(A[t]+" ");
         System.out.println();
@@ -93,7 +100,7 @@ import java.util.Scanner;
                         lowerIndex = temp[0][arraySecton];
                         insertHeap(B, A[lowerIndex], arraySecton, k);
                     }
-                    System.out.println("Content of the heap is ");
+                    System.out.print("Content of the heap is ");
                     for (int t=0;t<k;t++){
                         if (B[0][t]!=Nan)
                             System.out.print(B[0][t]+" ");
